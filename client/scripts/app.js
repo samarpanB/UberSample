@@ -1,7 +1,8 @@
 app = angular.module('uberSample', [
   'ui.router',
   'ngStorage',
-  'datatables'
+  'datatables',
+  'ngMap'
 ])
 .run(['$rootScope', '$state', '$stateParams',
     function ($rootScope,   $state,   $stateParams) {

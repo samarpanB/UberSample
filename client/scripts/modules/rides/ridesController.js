@@ -1,7 +1,7 @@
 app.controller('RidesCtrl', ['$scope', '$q', '$compile', '$http', 'dateFilter',
-    'DTOptionsBuilder', 'DTColumnBuilder', '$state', '$timeout',
+    'DTOptionsBuilder', 'DTColumnBuilder', '$state', '$timeout', 'NgMap',
     function ($scope, $q, $compile, $http, dateFilter,
-        DTOptionsBuilder, DTColumnBuilder, $state, $timeout) {
+        DTOptionsBuilder, DTColumnBuilder, $state, $timeout, NgMap) {
 
         var _watcherRemovers = [];
         
@@ -9,8 +9,11 @@ app.controller('RidesCtrl', ['$scope', '$q', '$compile', '$http', 'dateFilter',
         $scope.pgSizes = ["5", "10", "15", "20", "25"];
         $scope.pgSize = $scope.pgSizes[0];
         $scope.refresh = true;
+        $scope.currentView = "table";
 
-        $scope.getAll = function(max, offset, refresh) {
+        $scope.mapMarkers = [];
+
+        $scope.getRides = function(max, offset, refresh) {
             var params = {
                 max: max,
                 offset: offset,
@@ -20,6 +23,49 @@ app.controller('RidesCtrl', ['$scope', '$q', '$compile', '$http', 'dateFilter',
             return $http.get('rides', {
                 params: params
             });
+        };
+
+        $scope.getAllRides = function(refresh) {
+            var params = {
+                max: 500,
+                offset: 0,
+                refresh: refresh
+            };
+
+            $scope.mapMarkers = [];
+            return $http.get('rides', {
+                params: params
+            }).then(function (resp) {
+                angular.forEach(resp.data.records, function (rec, i) {
+                    $scope.mapMarkers.push({
+                        pos: [rec.startCity.lat, rec.startCity.lng],
+                        name: rec.startCity.name
+                    });
+                });
+
+                // Resize map after first redraw
+                var timer = $timeout(function () {
+                    NgMap.getMap().then(function (map) {
+                        var center = map.getCenter();
+                        google.maps.event.trigger(map, "resize");
+                        map.setCenter(center);
+                    });
+                }).then(function () {
+                    $timeout.cancel(timer);
+                });
+                return resp;
+            });
+        };
+
+        $scope.changeView = function(newView) {
+            if (newView === 'map') {
+                $scope.getAllRides(false);
+            }
+            $scope.currentView = newView;
+        };
+
+        $scope.syncMap = function() {
+            $scope.getAllRides(true);
         };
 
         /**** Table related code - START ****/
@@ -37,7 +83,7 @@ app.controller('RidesCtrl', ['$scope', '$q', '$compile', '$http', 'dateFilter',
 
         $scope.dtOptions =DTOptionsBuilder.newOptions()
         .withOption('ajax', function (data, callback) {
-            $scope.getAll(data.length, data.start, $scope.refresh).then(function(r){
+            $scope.getRides(data.length, data.start, $scope.refresh).then(function(r){
                 $scope.refresh = false;
                 callback({
                     draw: data.draw,

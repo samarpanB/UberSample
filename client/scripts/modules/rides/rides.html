@@ -1,20 +1,62 @@
 <div class="jumbotron">
 	<div class="container">
-		<div class="row">
-		    <div class="col-md-8">
-		    	<select id="itemPerPage" ng-model="pgSize" ng-options="item as item for item in pgSizes" 
-	            	ng-change="refreshTable(pgSize)" class="pull-left">
-	            </select>
-		    </div>
-		    <div class="col-md-4">
-		        <button id="itemPerPage" ng-click="refreshTable(pgSize, true)" 
-		        	class="pull-right btn-primary">
-		        	Sync From Uber
-	            </button>
-		    </div>
+		<!-- Nav tabs -->
+		<ul class="nav nav-pills" role="tablist">
+			<li role="presentation" ng-class="{'active' : currentView === 'table'}">
+				<a href="javascript:void(0);" aria-controls="table" role="tab" 
+					data-toggle="tab" ng-click="changeView('table')">
+					Table View
+				</a>
+			</li>
+			<li role="presentation" ng-class="{'active' : currentView === 'map'}">
+				<a href="javascript:void(0);" aria-controls="table" role="tab" 
+					data-toggle="tab" ng-click="changeView('map')">
+					Map View
+				</a>
+			</li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content" style="padding: 20px;">
+			<div role="tabpanel" class="tab-pane active" id="table" ng-show="currentView === 'table'">
+				<div class="row" style="padding-bottom: 10px;">
+				    <div class="col-md-8">
+				   		<label class="pull-left" style="padding-right: 10px;">Page Size</label>
+				    	<select id="itemPerPage" ng-model="pgSize" ng-options="item as item for item in pgSizes" 
+			            	ng-change="refreshTable(pgSize)" class="pull-left">
+			            </select>
+				    </div>
+				    <div class="col-md-4">
+				        <button id="itemPerPage" ng-click="refreshTable(pgSize, true)" 
+				        	class="pull-right btn-primary">
+				        	Sync From Uber
+			            </button>
+				    </div>
+				</div>
+				<table class="table table-hover table-condensed" datatable="" dt-options="dtOptions"
+					dt-columns="dtColumns" dt-instance="dtInstance">
+				</table>
+			</div>
+			<div role="tabpanel" class="tab-pane active" id="map" ng-show="currentView === 'map'"
+				map-lazy-load="https://maps.google.com/maps/api/js?key=AIzaSyD7eG4xock1uQ7CUtdH-xTzGQae0RuvywA">
+				<div class="row" style="padding-bottom: 10px;">
+					<div class="col-md-8">
+				    </div>
+				    <div class="col-md-4">
+				        <button id="itemPerPage" ng-click="syncMap()" class="pull-right btn-primary">
+				        	Sync From Uber
+			            </button>
+				    </div>
+				</div>
+				<ng-map zoom="11">
+			      	<marker ng-repeat="p in mapMarkers"
+			        	position="{{p.pos}}"
+			        	centered="$index === 0"
+			        	title="{{p.name}}">
+			        </marker>
+			    </ng-map>
+			</div>
 		</div>
-		<table class="table table-hover table-condensed" datatable="" dt-options="dtOptions"
-			dt-columns="dtColumns" dt-instance="dtInstance">
-		</table>
+		
 	</div>
 </div>
