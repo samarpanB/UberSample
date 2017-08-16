@@ -1,0 +1,20 @@
+<div class="jumbotron">
+	<div class="container">
+		<div class="row">
+		    <div class="col-md-8">
+		    	<select id="itemPerPage" ng-model="pgSize" ng-options="item as item for item in pgSizes" 
+	            	ng-change="refreshTable(pgSize)" class="pull-left">
+	            </select>
+		    </div>
+		    <div class="col-md-4">
+		        <button id="itemPerPage" ng-click="refreshTable(pgSize, true)" 
+		        	class="pull-right btn-primary">
+		        	Sync From Uber
+	            </button>
+		    </div>
+		</div>
+		<table class="table table-hover table-condensed" datatable="" dt-options="dtOptions"
+			dt-columns="dtColumns" dt-instance="dtInstance">
+		</table>
+	</div>
+</div>

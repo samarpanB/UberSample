@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- using twitter bootstrap, but of course -->
+    <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/jumbotron-narrow.css">
+    <link rel="stylesheet" type="text/css" href="./node_modules/datatables.net-dt/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/styles.css">
+
+    <!-- Include 3rd party libs-->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/angular/angular.min.js"></script>
+    <script src="./node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/ngstorage/ngStorage.min.js"></script>
+    <script src="./node_modules/underscore/underscore.js"></script>
+    <script src="./node_modules/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="./node_modules/angular-datatables/dist/angular-datatables.min.js"></script>
+    <script src="./node_modules/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+
+    
+    <script src="./scripts/config.js"></script>
+    <script src="./scripts/app.js"></script>
+
+    <script src="./scripts/common/interceptor.js"></script>
+    <script src="./scripts/common/sessionService.js"></script>
+    
+    <script src="./scripts/modules/home/homeController.js"></script>
+    <script src="./scripts/modules/auth/authController.js"></script>
+    <script src="./scripts/modules/rides/ridesController.js"></script>
+
+
+  </head>
+  <body ng-app="uberSample">
+    <div class="container" ng-class="{'container': !('rides' | isState)}">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            
+          </ul>
+        </nav>
+        <h3 class="text-muted">Uber Sample</h3>
+      </div>
+
+      <div id="mainContent" ui-view>
+      </div>
+      
+      <footer class="footer">
+        <p>&copy; 2017 Company, Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+  </body>
+</html>
